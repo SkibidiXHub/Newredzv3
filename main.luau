@@ -1400,7 +1400,7 @@ Tabs.Main:AddDropdown({
     Options = {"Small", "Large", "Big"},
     Default = "Normal",
     Callback = function(Value)
-        local scales = {Small = 0.8, Normal = 1.0, Big = 1.2}
+        local scales = {Small = 0.8, Large = 1.0, Big = 1.2}
         Window:SetUIScale(scales[Value])
     end
 })
@@ -1650,6 +1650,43 @@ spawn(function()
             end
           end
         end
+      end)
+    end
+  end
+end)
+
+Tabs.Main:AddSection("Rương")
+
+ChestTW = Tabs.Main:AddToggle({
+Name = "Tự Động Nhặt Rương [ Tween ]", 
+Description = "Tự động thu thập rương bằng Tween", 
+Default = false,
+Callback = function(Value)
+  _G.AutoFarmChest = Value
+end})
+spawn(function()
+  while wait(Sec) do
+    if _G.AutoFarmChest then
+      pcall(function()
+        local CollectionService = game:GetService("CollectionService")
+        local Players = game:GetService("Players")
+        local Player = Players.LocalPlayer
+        local Character = Player.Character or Player.CharacterAdded:Wait()                
+        if not Character then return end                
+        local Position = Character:GetPivot().Position
+        local Chests = CollectionService:GetTagged("_ChestTagged")      
+        local Distance, Nearest = math.huge, nil  
+        for i = 1, #Chests do
+          local Chest = Chests[i]
+          local Magnitude = (Chest:GetPivot().Position - Position).Magnitude        
+          if not SelectedIsland or Chest:IsDescendantOf(SelectedIsland) then
+            if not Chest:GetAttribute("IsDisabled") and Magnitude < Distance then
+              Distance = Magnitude
+              Nearest = Chest
+            end
+          end
+        end
+      if Nearest then _tp(Nearest:GetPivot()) end
       end)
     end
   end
