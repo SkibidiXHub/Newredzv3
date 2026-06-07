@@ -1593,7 +1593,7 @@ spawn(function()
   end
 end)
 
-if World3 then
+if v613 == 3 then
 CastleRaids = Tabs.Main:AddToggle({
 Name = "Tự Động Farm Hải Tặc Biển", 
 Description = "Tự động hoàn thành sự kiện hải tặc Lâu Đài Trên Biển", 
@@ -1631,7 +1631,7 @@ spawn(function()
   end
 end)
 
-if World2 then
+if v613 == 2 then
 FactoryRaids = Tabs.Main:AddToggle({
 Name = "Tự Động Farm Nhà Máy", 
 Description = "Tự động farm nhà máy, xuất hiện mỗi 1 giờ 30 phút", 
