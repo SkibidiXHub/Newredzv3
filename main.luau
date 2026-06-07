@@ -1397,7 +1397,7 @@ spawn(function()
 end)
 Tabs.Main:AddDropdown({
     Name = "Kích Thước UI",
-    Options = {"Small", "Normal", "Big"},
+    Options = {"Small", "Large", "Big"},
     Default = "Normal",
     Callback = function(Value)
         local scales = {Small = 0.8, Normal = 1.0, Big = 1.2}
@@ -1572,7 +1572,7 @@ end)
 
 ClosetMons = Tabs.Main:AddToggle({
 Name = "Tự Động Kẻ Địch Gần", 
-Description = "Tự động tiêu diệt kẻ địch gần", 
+Description = "Tự động tiêu diệt những kẻ địch gần", 
 Default = false, 
 Callback = function(Value)
   _G.AutoFarmNear = Value
@@ -1587,6 +1587,70 @@ spawn(function()
               repeat wait() Attack.Kill(v,_G.AutoFarmNear) until not _G.AutoFarmNear or not v.Parent or v.Humanoid.Health <= 0
             end
           end
+        end
+      end
+    end)
+  end
+end)
+
+if World3 then
+CastleRaids = Tabs.Main:AddToggle({
+Name = "Tự Động Farm Hải Tặc Biển", 
+Description = "Tự động hoàn thành sự kiện hải tặc Lâu Đài Trên Biển", 
+Default = false,
+Callback = function(Value)
+  _G.AutoRaidCastle = Value
+end})
+spawn(function()
+  while wait(Sec) do
+    if _G.AutoRaidCastle then
+      pcall(function()
+      local CFrameCastleRaid = CFrame.new(-5496.17432, 313.768921, -2841.53027, 0.924894512, 7.37058015e-09, 0.380223751, 3.5881019e-08, 1, -1.06665446e-07, -0.380223751, 1.12297109e-07, 0.924894512)
+        if (CFrame.new(-5539.3115234375, 313.800537109375, -2972.372314453125).Position - Root.Position).Magnitude <= 500 then
+          for i,v in pairs(workspace.Enemies:GetChildren()) do
+            if v:FindFirstChild("HumanoidRootPart") and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
+              if v.Name then
+                if (v.HumanoidRootPart.Position - Root.Position).Magnitude <= 2000 then
+                  repeat wait() Attack.Kill(v,_G.AutoRaidCastle) until not _G.AutoRaidCastle or not v.Parent or v.Humanoid.Health <= 0 or not workspace.Enemies:FindFirstChild(v.Name)
+                end
+              end
+            end
+          end
+        else
+          local Castle_Mob = {"Galley Pirate","Galley Captain","Raider","Mercenary","Vampire","Zombie","Snow Trooper","Winter Warrior","Lab Subordinate","Horned Warrior","Magma Ninja","Lava Pirate","Ship Deckhand","Ship Engineer","Ship Steward","Ship Officer","Arctic Warrior","Snow Lurker","Sea Soldier","Water Fighter"}
+          for i = 1,#Castle_Mob do
+            if replicated:FindFirstChild(Castle_Mob[i]) then
+              for _,v in pairs(replicated:GetChildren()) do
+                if table.find(Castle_Mob, v.Name) then _tp(CFrameCastleRaid) end
+              end
+            end
+          end
+        end
+      end)
+    end
+  end
+end)
+
+if World2 then
+FactoryRaids = Tabs.Main:AddToggle({
+Name = "Tự Động Farm Nhà Máy", 
+Description = "Tự động farm nhà máy, xuất hiện mỗi 1 giờ 30 phút", 
+Default = false,
+Callback = function(Value)
+  _G.AutoFactory = Value
+end})
+spawn(function()
+  while wait(Sec) do
+    pcall(function()
+      if _G.AutoFactory then
+        local v = GetConnectionEnemies("Core")
+        if v then
+          repeat wait()
+            EquipWeapon(_G.SelectWeapon)
+            _tp(CFrame.new(448.46756, 199.356781, -441.389252))
+          until v.Humanoid.Health <= 0 or _G.AutoFactory == false
+        else
+          _tp(CFrame.new(448.46756, 199.356781, -441.389252))
         end
       end
     end)
