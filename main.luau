@@ -1593,7 +1593,31 @@ spawn(function()
   end
 end)
 
-if Place == 100117331123089 then
+FactoryRaids = Tabs.Main:AddToggle({
+Name = "Tự Động Farm Nhà Máy", 
+Description = "Tự động farm nhà máy, xuất hiện mỗi 1 giờ 30 phút", 
+Default = false,
+Callback = function(Value)
+  _G.AutoFactory = Value
+end})
+spawn(function()
+  while wait(Sec) do
+    pcall(function()
+      if _G.AutoFactory then
+        local v = GetConnectionEnemies("Core")
+        if v then
+          repeat wait()
+            EquipWeapon(_G.SelectWeapon)
+            _tp(CFrame.new(448.46756, 199.356781, -441.389252))
+          until v.Humanoid.Health <= 0 or _G.AutoFactory == false
+        else
+          _tp(CFrame.new(448.46756, 199.356781, -441.389252))
+        end
+      end
+    end)
+  end
+end)
+
 CastleRaids = Tabs.Main:AddToggle({
 Name = "Tự Động Farm Hải Tặc Biển", 
 Description = "Tự động hoàn thành sự kiện hải tặc Lâu Đài Trên Biển", 
@@ -1628,31 +1652,5 @@ spawn(function()
         end
       end)
     end
-  end
-end)
-
-if Place == 79091703265657 then
-FactoryRaids = Tabs.Main:AddToggle({
-Name = "Tự Động Farm Nhà Máy", 
-Description = "Tự động farm nhà máy, xuất hiện mỗi 1 giờ 30 phút", 
-Default = false,
-Callback = function(Value)
-  _G.AutoFactory = Value
-end})
-spawn(function()
-  while wait(Sec) do
-    pcall(function()
-      if _G.AutoFactory then
-        local v = GetConnectionEnemies("Core")
-        if v then
-          repeat wait()
-            EquipWeapon(_G.SelectWeapon)
-            _tp(CFrame.new(448.46756, 199.356781, -441.389252))
-          until v.Humanoid.Health <= 0 or _G.AutoFactory == false
-        else
-          _tp(CFrame.new(448.46756, 199.356781, -441.389252))
-        end
-      end
-    end)
   end
 end)
